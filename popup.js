@@ -1,7 +1,7 @@
 var allLinks = [];
 
 function descargarxml() {
-  document.getElementById('status').textContent = 'Descargando XML...';
+  document.getElementById("status").textContent = "Descargando XML...";
   // Hacemos una copia de allLinks
   // luego ejecutamos un intervalo cada 1000 milisegundos para extraer un elemento del array y descargarlo
   // cuando no haya elementos, cancelar el intervalo.
@@ -16,7 +16,7 @@ function descargarxml() {
       chrome.downloads.download(
         {
           url: url,
-          filename: nombre + '.xml',
+          filename: nombre + ".xml",
         },
         function (id) {},
       );
@@ -27,16 +27,15 @@ function descargarxml() {
 }
 
 function descargarpdf() {
-  console.log('ATTEMPT DOWNLOAD');
-  document.getElementById('status').textContent = 'Descargando PDF...';
+  document.getElementById("status").textContent = "Descargando PDF...";
 
   // Hacemos una copia de allLinks
   // luego ejecutamos un intervalo cada 1000 milisegundos para extraer un elemento del array y descargarlo
   // cuando no haya elementos, cancelar el intervalo.
-  //los pdf están en el array en posición 1
+  // los pdf están en el array en posición 1
   var urls = allLinks[1];
   var nombres = allLinks[2];
-  console.log('URLS', urls);
+
   var interval = setInterval(function () {
     var url = urls.shift();
     var nombre = nombres.shift();
@@ -45,7 +44,7 @@ function descargarpdf() {
       chrome.downloads.download(
         {
           url: url,
-          filename: nombre + '.pdf',
+          filename: nombre + ".pdf",
         },
         function (id) {},
       );
@@ -59,34 +58,29 @@ function descargarpdf() {
 chrome.runtime.onMessage.addListener(function (links) {
   allLinks = links;
   //cambiamos los textos de los botones
-  document.getElementById('cuenta-xml').innerText = allLinks[0].length;
-  document.getElementById('cuenta-pdf').innerText = allLinks[1].length;
+  document.getElementById("cuenta-xml").innerText = allLinks[0].length;
+  document.getElementById("cuenta-pdf").innerText = allLinks[1].length;
 });
 
 window.onload = function () {
   //botones
-  document.getElementById('descargarxml').onclick = descargarxml;
-  document.getElementById('descargarpdf').onclick = descargarpdf;
+  document.getElementById("descargarxml").onclick = descargarxml;
+  document.getElementById("descargarpdf").onclick = descargarpdf;
 
   //enlaces
-  document.getElementById('analizar').onclick = function () {
+  document.getElementById("iralsat").onclick = function () {
     chrome.tabs.create({
-      url: 'https://analizador-cfdi.netlify.app/',
+      url: "https://portalcfdi.facturaelectronica.sat.gob.mx",
     });
   };
-  document.getElementById('iralsat').onclick = function () {
+  document.getElementById("enlace").onclick = function () {
     chrome.tabs.create({
-      url: 'https://portalcfdi.facturaelectronica.sat.gob.mx',
+      url: "https://eduardoarandah.github.io/",
     });
   };
-  document.getElementById('enlace').onclick = function () {
+  document.getElementById("manual").onclick = function () {
     chrome.tabs.create({
-      url: 'https://eduardoarandah.github.io/',
-    });
-  };
-  document.getElementById('manual').onclick = function () {
-    chrome.tabs.create({
-      url: 'https://github.com/eduardoarandah/DescargaMasivaCFDIChrome',
+      url: "https://github.com/brunotf9/DescargaMasivaCFDIChromeV3",
     });
   };
 
@@ -100,11 +94,13 @@ window.onload = function () {
       function (activeTabs) {
         //checar si url contiene "https://portalcfdi.facturaelectronica.sat.gob.mx/"
         var url = activeTabs[0].url;
-        var estamos_en_sat = url.startsWith('https://portalcfdi.facturaelectronica.sat.gob.mx');
+        var estamos_en_sat = url.startsWith(
+          "https://portalcfdi.facturaelectronica.sat.gob.mx",
+        );
         if (estamos_en_sat) {
           chrome.scripting.executeScript({
             target: { tabId: activeTabs[0].id },
-            files: ['inject.js'],
+            files: ["inject.js"],
           });
         }
       },
